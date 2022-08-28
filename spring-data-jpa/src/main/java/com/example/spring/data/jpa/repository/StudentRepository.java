@@ -3,6 +3,7 @@ package com.example.spring.data.jpa.repository;
 import com.example.spring.data.jpa.entity.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,5 +28,19 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     @Query("select s.firstName from Student s where s.emailId = ?1") // ?1 means the first parameter
     String getStudentFirstNameByEmailAddress(String emailId);
+
+    //Native
+    @Query(
+            value = "SELECT * FROM tbl_student s where s.email_address = ?1",
+            nativeQuery = true
+    )
+    Student getStudentByEmailAddressNative(String emailId);
+
+    //Native Named Param
+    @Query(
+            value = "SELECT * FROM tbl_student s where s.email_address = :emailId",
+            nativeQuery = true
+    )
+    Student getStudentByEmailAddressNamedParam(@Param("emailId") String emailId);
 
 }
